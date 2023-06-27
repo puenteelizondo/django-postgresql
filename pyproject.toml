@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "django-postgresql"
+version = "0.1.0"
+description = ""
+authors = ["jpuente10 <puenteelizondo02@gmail.com>"]
+readme = "README.md"
+packages = [{include = "django_postgresql"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+boto3 = "^1.26.160"
+django = "^4.2.2"
+psycopg2-binary = "^2.9.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
