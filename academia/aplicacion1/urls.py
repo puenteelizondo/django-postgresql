@@ -16,8 +16,17 @@ Including another URLconf
 """
 
 from django.urls import path, include
+from aplicacion1 import views
 
+# libreria para ignorar el error
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
-    path("aplicacion1/", include("aplicacion1.urls")),
+    # es para que no nos de error en el post cuando hacemos un post agregamos ese error al igual que el update porque tambieen hacemos post
+    path("crear/", csrf_exempt(views.crear), name="crear"),
+    path("lista/", (views.lista), name="lista"),
+    # cuando hagas la llamada a get/ le pidas un id
+    path("get/<int:id>", (views.get), name="get"),
+    path("update/<int:id>", csrf_exempt(views.update), name="update"),
+    path("delete/<int:id>", (views.delete), name="delete"),
 ]

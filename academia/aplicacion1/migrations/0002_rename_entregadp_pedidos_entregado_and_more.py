@@ -4,24 +4,23 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('aplicacion1', '0001_initial'),
+        ("aplicacion1", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='pedidos',
-            old_name='entregadp',
-            new_name='entregado',
+            model_name="pedidos",
+            old_name="entregadp",
+            new_name="entregado",
         ),
         migrations.RemoveField(
-            model_name='clientes',
-            name='telofono',
+            model_name="clientes",
+            name="telofono",
         ),
         migrations.AddField(
-            model_name='clientes',
-            name='telefono',
+            model_name="clientes",
+            name="telefono",
             field=models.IntegerField(default=1),
             preserve_default=False,
         ),
