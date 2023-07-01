@@ -4,6 +4,7 @@ import json
 from django.http import HttpResponse, JsonResponse
 
 from aplicacion1.models import Clientes
+from django.views.decorators.csrf import csrf_protect
 
 
 def crear(request):
@@ -145,7 +146,7 @@ def update(request, id: int):
 
 def delete(request, id: int):
     # jalamos lo que tengamos y lo metemos a la variable
-    #no usamos body porque solo lon jalamos con el id
+    #no usamos body porque solo lo jalamos con el id
     
     if request.method == "DELETE":
         try:
@@ -153,15 +154,16 @@ def delete(request, id: int):
             # y en el parametro le decimos que pk=id porque pk se maneja en la base de datos
             # sino existe se va al 404
             object_to_update = Clientes.objects.get(pk=id)
-            # ahora que ya encontro actualizamos con la variable que tiene los datos
+            # ahora que ya encontro borramos el objeto
             
             object_to_update.delete()
 
             return JsonResponse(
                 {
-                    
+                    "message":"object is deleted"
                 },
-                status=200,
+                #se devuelve un 204 de no contend  quiere decir que se borro correctamente
+                status=204,
             )
         # sino encuentra en la base de datos ya entra aqui
         except Clientes.DoesNotExist:
