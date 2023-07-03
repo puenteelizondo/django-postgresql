@@ -18,7 +18,7 @@ def crear(request):
 
         if not validate_token(dict(request.headers).get("X-Token")):
             return JsonResponse(
-                {"message": "Acceso denegado, gonorreaaaa no toques mi base de datos"},
+                {"message": "Acceso denegado"},
                 status=401,
             )
         # lo que hace es convertir una str a diccionario
