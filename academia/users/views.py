@@ -10,7 +10,7 @@ import hashlib
 # Create your views here.
 #esta libreria sirve para crear tokens
 import secrets
-
+#funcione como un register
 def crear(request):
     # solo se permite post
     if request.method == "POST":
@@ -45,6 +45,7 @@ def crear(request):
 
 def login(request):
     # solo se permite post
+    #siempre los login son un post
     if request.method == "POST":
         
         # lo que hace es convertir una str a diccionario
@@ -52,6 +53,7 @@ def login(request):
         datos = json.loads(request.body)
         try:
         #almacenamos en la variable para evaluar si estan en la base de datos
+        #jalamos todo lo que almacena con lo que pedimos el email y password
             users = usuarios.objects.get(
             email=datos["email"],
             #encriptamos el password con esta sintaxis de linea
@@ -64,15 +66,21 @@ def login(request):
             return JsonResponse(
                 {
                     "massage":"error de usuario o contraseña"
+                    #error de permisos cuando el usuario no tiene acceso a la aplicacion
                 },status=401
             )
+        except Exception: return JsonResponse(
+                {
+                    "massage":"Internal server error"
+                    #error de permisos cuando el usuario no tiene acceso a la aplicacion
+                },status=500)
         print(users)
         
         # el http es para interactuar con el frontend mensaje al ejecutar correctamente
         # agregamos el json  para devolver objetos y devolvemos los creados con un status de creados que es 201
         return JsonResponse(
             {
-                "massage":"existe"
+                "token":users.token
             },
             status=200,
         )
@@ -84,6 +92,7 @@ def login(request):
             {"message": "method not allowed"},
             status=405,
         )
+        
 def delete(request,id: int):
     # jalamos lo que tengamos y lo metemos a la variable
     #no usamos body porque solo lo jalamos con el id

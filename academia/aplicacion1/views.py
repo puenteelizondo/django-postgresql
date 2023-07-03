@@ -5,11 +5,22 @@ from django.http import HttpResponse, JsonResponse
 
 from aplicacion1.models import Clientes
 from django.views.decorators.csrf import csrf_protect
-
+from aplicacion1.utils.auth import validate_token
 
 def crear(request):
     # solo se permite post
     if request.method == "POST":
+        #validamos que el token existe y protegemos cada endpoint
+        #necesitamos pasarnos a diccionario para poder leerlo y condicionarlo
+        #siempre recibimos cuando es de la base de datos un http y necesitamos convertirlo a json
+        #el request es lo que nos devuelve y el headers son las variables que se manejan en el postman entonces  convertimos a diccionario 
+        #si no se encuentra el token en la base de datos manda un mensaje de acceso denegado
+
+        if not validate_token(dict(request.headers).get("X-Token")):
+            return JsonResponse(
+                {"message": "Acceso denegado, gonorreaaaa no toques mi base de datos"},
+                status=401,
+            )
         # lo que hace es convertir una str a diccionario
         # la variable datos jala los datos ingresados de la base de datos
         datos = json.loads(request.body)
@@ -39,6 +50,11 @@ def crear(request):
 def lista(request):
     # solo se permite get
     if request.method == "GET":
+        if not validate_token(dict(request.headers).get("X-Token")):
+            return JsonResponse(
+                {"message": "Invalid token"},
+                status=401,
+            )
         # de la aplicacion traer todos los objetos de la tabla clientes
         # como ya se crea un id automatico en la base de datos solo lo que se hace es traerlo en el json
         response = [
@@ -66,6 +82,11 @@ def lista(request):
 def get(request, id: int):
     # solo se permite get
     if request.method == "GET":
+        if not validate_token(dict(request.headers).get("X-Token")):
+            return JsonResponse(
+                {"message": "Invalid token"},
+                status=401,
+            )
         try:
             # aca traemos solo un objeto con el get
             # y en el parametro le decimos que pk=id porque pk se maneja en la base de datos
@@ -105,6 +126,11 @@ def update(request, id: int):
     # jalamos lo que tengamos y lo metemos a la variable
     datos = json.loads(request.body)
     if request.method == "PUT":
+        if not validate_token(dict(request.headers).get("X-Token")):
+            return JsonResponse(
+                {"message": "Invalid token"},
+                status=401,
+            )
         try:
             # aca traemos solo un objeto con el get
             # y en el parametro le decimos que pk=id porque pk se maneja en la base de datos
@@ -149,6 +175,11 @@ def delete(request, id: int):
     #no usamos body porque solo lo jalamos con el id
     
     if request.method == "DELETE":
+        if not validate_token(dict(request.headers).get("X-Token")):
+            return JsonResponse(
+                {"message": "Invalid token"},
+                status=401,
+            )
         try:
             # aca traemos solo un objeto con el get
             # y en el parametro le decimos que pk=id porque pk se maneja en la base de datos
